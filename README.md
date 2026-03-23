@@ -275,6 +275,5 @@ advancements/
 ## 👨‍💻 Crediti
 
 * Plugin originale: WildAdventure
-* Fork e modifiche: (tuo nome qui)
 
 ---
