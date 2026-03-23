@@ -513,7 +513,7 @@ public class SurvivalGames extends JavaPlugin {
 			logPurple("Impossibile alterare il numero max di giocatori");
 		}
 		
-		if (SpawnObjects.getPlatforms().size() == 0) {
+		if (SpawnObjects.getPlatforms().isEmpty()) {
 			logPurple("Nessuna piattaforma trovata!");
 			WildCommons.pauseThread(10000);
 			Bukkit.shutdown();
