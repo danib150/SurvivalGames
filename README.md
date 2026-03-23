@@ -8,20 +8,75 @@ Questo plugin implementa una modalità **Survival Games (Hunger Games)** per ser
 Questo plugin è una **fork del progetto originale** disponibile qui:
 https://github.com/WildAdventure/SurvivalGames
 
-Il sistema gestisce:
+---
 
-* Caricamento mappe casuali
-* Spawn dei giocatori su piattaforme
-* Loot nelle casse
-* Timer di gioco (pregame, invincibilità, final battle)
-* Sistema punti e database MySQL
-* Sponsor e GUI
+## 📦 Dipendenze
+
+Questo plugin richiede le seguenti dipendenze:
+
+* WildCommons → https://github.com/danib150/WildCommons
+* Boosters → https://github.com/danib150/Boosters
+
+⚠️ **Importante:**
+Queste librerie **NON sono pubblicate su Maven Central**, quindi devono essere:
+
+* installate manualmente
+* oppure buildate automaticamente tramite GitHub Actions
+
+---
+
+## ⚙️ Build del progetto
+
+### ✔️ Metodo consigliato (GitHub Actions)
+
+Per compilare automaticamente il plugin, è necessario buildare prima le dipendenze.
+
+```yaml id="0h3l9d"
+name: Build
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout plugin
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 8
+
+      - name: Clone WildCommons
+        run: git clone https://github.com/danib150/WildCommons.git
+
+      - name: Build WildCommons
+        run: |
+          cd WildCommons
+          mvn -B install
+
+      - name: Clone Boosters
+        run: git clone https://github.com/danib150/Boosters.git
+
+      - name: Build Boosters
+        run: |
+          cd Boosters
+          mvn -B install
+
+      - name: Build SurvivalGames
+        run: mvn -B package
+```
 
 ---
 
 ## 📁 Struttura delle cartelle
 
-```text
+```text id="r0t2wo"
 plugins/
 └── SurvivalGames/
     ├── config.yml
@@ -41,21 +96,15 @@ plugins/
 
 ### 📌 Dove vanno messe
 
-Le mappe devono essere dentro:
-
-```
+```text id="v7s0zq"
 /plugins/SurvivalGames/maps/
 ```
-
-Ogni mappa è una **cartella mondo completa** (NON zip).
 
 ---
 
 ### 📄 maps.yml
 
-Esempio:
-
-```yaml
+```yaml id="v0s9u2"
 breeze2:
   name: "Breeze 2"
   radius: 400
@@ -64,216 +113,44 @@ breeze2:
   thunder: false
 ```
 
-### 🔹 Campi
-
-* `name` → nome visualizzato (opzionale)
-* `radius` → raggio world border (OBBLIGATORIO)
-* `time` → DAY, NIGHT, SUNSET (opzionale)
-* `rain` → true/false
-* `thunder` → true/false
-
----
-
-## ⚙️ Funzionamento mappe
-
-### 🔄 Caricamento
-
-All'avvio:
-
-1. Il plugin legge `maps.yml`
-2. Sceglie una mappa casuale
-3. Copia la cartella in `/world`
-4. Avvia la partita
-
 ---
 
 ## 📍 Setup della mappa
 
-### 1. Spawn del mondo (FONDAMENTALE)
+### ✔️ Spawn
 
-Devi impostarlo al centro arena:
-
-```
+```id="qj6v1k"
 /setworldspawn
 ```
 
----
+### ✔️ Piattaforme
 
-### 2. Piattaforme giocatori
-
-Ogni player spawna su una piattaforma definita da:
-
-```
+```id="c0c4bg"
 SPONGE
 BEACON
 ```
 
-* Beacon sotto
-* Sponge sopra
+### ✔️ Chest
 
-👉 Il plugin:
-
-* rimuove i blocchi
-* salva la posizione
-* orienta il player verso il centro
-
----
-
-### 3. Chest dello spawn
-
-Le casse vicino allo spawn:
-
-* vengono rilevate automaticamente
-* vengono riempite dal plugin
-
-📌 Devono essere entro ~50 blocchi dallo spawn
-
----
-
-### 4. Raggio di rilevamento
-
-Il plugin legge:
-
-* 7x7 chunk attorno allo spawn (~48 blocchi)
-
-👉 Se qualcosa è troppo lontano → NON viene visto
-
----
-
-## 🌦️ Impostazioni mondo
-
-Il plugin imposta automaticamente:
-
-* PvP attivo
-* Meteo configurabile
-* Ciclo giorno disattivato
-* Mob spawning attivo
-* Fire tick attivo
-
----
-
-## 🎁 Sistema casse
-
-Definito in:
-
-```
-chests.yml
-```
-
-* Tier1 → loot base
-* Tier2 → loot avanzato
-
----
-
-## 🛒 Sponsor
-
-Configurato in:
-
-```
-sponsor.yml
-```
-
-Permette:
-
-* acquistare oggetti durante la partita
-* GUI con icone
-* sistema punti
-
----
-
-## 🗄️ Database MySQL
-
-Il plugin usa MySQL per salvare:
-
-* kills
-* deaths
-* wins
-* points
-
----
-
-## ⏱️ Timer di gioco
-
-Il sistema include:
-
-* Pregame
-* Immobilità iniziale
-* Invincibilità
-* Game timer
-* Final battle
-* World border shrinking
-* Fine partita
-
----
-
-## 🧠 Sistema vittoria
-
-Il plugin controlla:
-
-* se resta 1 solo giocatore → vittoria
-* assegna punti
-* salva nel database
-* riavvia server
+Vicino allo spawn (~50 blocchi)
 
 ---
 
 ## ⚠️ Errori comuni
 
-### ❌ "Cartella mappa non trovata"
-
-→ nome sbagliato tra config e cartella
-
-### ❌ "Nessuna piattaforma trovata"
-
-→ mancano beacon + sponge
-
-### ❌ Mappa non caricata
-
-→ manca `level.dat`
-
-### ❌ Nessuna mappa valida
-
-→ `radius` ≤ 0 oppure config sbagliato
-
----
-
-## 🧹 Pulizia mappe (IMPORTANTE)
-
-Puoi eliminare:
-
-```
-players/
-playerdata/
-stats/
-advancements/
-```
-
-✔ Evita bug
-✔ Riduce problemi compatibilità
-
----
-
-## ✅ Checklist finale
-
-* [ ] mappa dentro `/maps`
-* [ ] `maps.yml` configurato
-* [ ] spawn centrale corretto
-* [ ] beacon + sponge per ogni player
-* [ ] chest vicino allo spawn
-* [ ] radius > 0
-
----
-
-## 🚀 Note finali
-
-* Il plugin seleziona una mappa casuale ad ogni avvio
-* Tutto ruota attorno allo spawn del mondo
-* Le piattaforme definiscono il numero massimo di giocatori
+* Cartella mappa non trovata
+* Nessuna piattaforma trovata
+* Mappa non caricata
 
 ---
 
 ## 👨‍💻 Crediti
 
-* Plugin originale: WildAdventure
+* Plugin originale: https://github.com/WildAdventure/SurvivalGames
+* Fork: danib150
+* Dipendenze:
+
+  * https://github.com/danib150/WildCommons
+  * https://github.com/danib150/Boosters
 
 ---
