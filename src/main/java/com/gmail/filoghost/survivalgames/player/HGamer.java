@@ -45,7 +45,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import wild.api.WildConstants;
-import wild.api.bridges.CosmeticsBridge;
 import wild.api.world.SpectatorAPI;
 
 import com.gmail.filoghost.survivalgames.GameState;
@@ -230,16 +229,12 @@ public class HGamer {
 	
 	public void givePregameStuff() {
 		SurvivalGames.getBookTutorial().giveTo(player);
-		
-		CosmeticsBridge.giveCosmeticsItems(player.getInventory());
-		CosmeticsBridge.updateCosmetics(player, CosmeticsBridge.Status.LOBBY);
+
 	}
 	
 	public void giveSpectatorStuff() {
 		player.getInventory().setItem(0, WildConstants.Spectator.TELEPORTER);
 		player.getInventory().setItem(8, WildConstants.Spectator.BACK_TO_HUB);
-		
-		CosmeticsBridge.updateCosmetics(player, CosmeticsBridge.Status.SPECTATOR);
 	}
 	
 	public void createTeam() {

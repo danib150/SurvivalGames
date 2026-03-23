@@ -38,7 +38,6 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.inventory.ItemStack;
 
-import wild.api.bridges.CosmeticsBridge;
 import wild.api.sound.EasySound;
 
 import com.gmail.filoghost.survivalgames.GameState;
@@ -98,7 +97,6 @@ public class PregameTimer extends TimerMaster {
 			
 			for (HGamer tribute : SurvivalGames.getAllGamersUnsafe()) {
 				if (tribute.getStatus() == Status.TRIBUTE) {
-					CosmeticsBridge.updateCosmetics(tribute.getPlayer(), CosmeticsBridge.Status.GAME);
 					tribute.cleanCompletely(GameMode.SURVIVAL);
 					SpawnObjects.toPlatformOrSpawn(tribute.getPlayer());
 					tribute.getPlayer().getInventory().addItem(compass);
