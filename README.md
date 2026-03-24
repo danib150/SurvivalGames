@@ -2,7 +2,7 @@
 
 ## 📌 Descrizione
 
-Questo plugin implementa una modalità **Survival Games (Hunger Games)** per server Minecraft Bukkit/Spigot.
+Questo plugin implementa una modalità **Survival Games** per server Minecraft Bukkit/Spigot.
 
 🔧 **Nota:**
 Questo plugin è una **fork del progetto originale** disponibile qui:
